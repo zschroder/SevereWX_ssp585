@@ -1,0 +1,333 @@
+---
+title: "Part I -- Severe Weather Reports"
+author: "Dr. Zoe Searcy"
+date: "2026-04-13"
+output: html_document
+---
+
+```{r}
+library(sf)
+library(dplyr)
+library(lubridate)
+library(tmap)
+library(USAboundaries)
+```
+
+
+## Tornado Data
+
+```{r, eval = FALSE}
+torn.df <- as.data.frame(st_read("C:/Users/SCHRODEZ/OneDrive - Embry-Riddle Aeronautical University/Desktop/Research_Projects/SevereWX_ssp585/1950-2024-torn-initpoint/1950-2024-torn-initpoint/1950-2024-torn-initpoint.shp"))
+```
+
+Use the rules outlined in the OneTor_F-scale-modifications.pdf (*https://www.spc.noaa.gov/wcm/OneTor_F-scale-modifications.pdf*) to assign EF ratings to any missing mag values (mag = -9).
+```{r, eval = FALSE}
+torn.df <- torn.df %>%
+  filter(!st %in% c("AK", "PR", "HI")) %>%
+  mutate(mag = ifelse(mag == -9 & len <= 5 & loss < 50, 0, mag),
+         mag = ifelse(mag == -9 & len > 5 & loss < 50, 1, mag),
+         mag = ifelse(mag == -9 & len <= 5 & loss < 5000, 0, mag),
+         mag = ifelse(mag == -9 & len > 5 & loss < 5000, 2, mag),
+         mag = ifelse(mag == -9 & len <= 5 & loss < 500000, 1, mag),
+         mag = ifelse(mag == -9 & len > 5 & loss < 500000, 3, mag),
+         mag = ifelse(mag == -9 & len <= 5 & loss < 50000000, 2, mag),
+         mag = ifelse(mag == -9 & len > 5 & loss < 50000000, 4, mag),
+         mag = ifelse(mag == -9 & len <= 5 & loss < 5000000000, 3, mag),
+         mag = ifelse(mag == -9 & len > 5 & loss < 5000000000, 5, mag))
+```
+
+
+```{r, eval = FALSE}
+torn.df <- torn.df %>%
+  filter(yr >= 1980, #keeping with Chiara Lepore's methodology
+         mag >= 1) #remove reporting bias found with the EF0 reports
+```
+
+```{r, eval = FALSE}
+test <- torn.df %>%
+  mutate(dy = format(as.Date(date,format="%y-%m-%d"), "%d"))
+```
+
+
+
+```{r, eval = FALSE}
+torn.df <- torn.df %>%
+  mutate(dy = format(as.Date(date,format="%Y-%m-%d"), "%d"),
+         DateTime = as.POSIXct(paste(yr, mo, dy, time), format = "%Y%m%d%H:%M:%S"),
+         Hour = hour(DateTime),
+         Year = year(DateTime),
+         conv_DateTime = DateTime - as.difftime(6, unit = "hours"),
+         conv_Date = as.Date(as_datetime(ifelse(Hour < 6, (DateTime - 86400), conv_DateTime), tz = "EST")),
+         length_m = len * 1609.34,
+         length_m = ifelse(length_m == 0, min(length_m[length_m > 0]), length_m), #takes care of zero length
+         width_m = wid * .9144,
+         width_m = ifelse(width_m == 0, min(width_m[width_m > 0]), width_m), #takes care of zero width
+         width_m = ifelse(Year >= 1995, width_m * pi/4, width_m), #takes care of change: avg to max
+         cas = inj + fat,
+         AreaPath = length_m * width_m,
+         Ma = factor(month.abb[mo], levels = month.abb[1:12])) %>%
+  sf::st_sf()
+```
+
+## Hail Data
+
+```{r, eval = FALSE}
+hail.df <- as.data.frame(st_read("C:/Users/SCHRODEZ/OneDrive - Embry-Riddle Aeronautical University/Desktop/Research_Projects/SevereWX_ssp585/1955-2024-hail-initpoint/1955-2024-hail-initpoint/1955-2024-hail-initpoint.shp"))
+```
+
+```{r}
+hail.df <- hail.df %>%
+  filter(yr >= 1980, #keeping with Chiara Lepore's methodology
+         mag >= 1.0) #keep only "severe" reports of 1 inch or greater
+```
+
+```{r, eval = FALSE}
+hail.df <- hail.df %>%
+  mutate(dy = format(as.Date(date,format="%Y-%m-%d"), "%d"),
+         DateTime = as.POSIXct(paste(yr, mo, dy, time), format = "%Y%m%d%H:%M:%S"),
+         Hour = hour(DateTime),
+         Year = year(DateTime),
+         conv_DateTime = DateTime - as.difftime(6, unit = "hours"),
+         conv_Date = as.Date(as_datetime(ifelse(Hour < 6, (DateTime - 86400), conv_DateTime), tz = "EST")),
+         cas = inj + fat,
+         Ma = factor(month.abb[mo], levels = month.abb[1:12])) %>%
+  sf::st_sf()
+```
+
+```{r, eval = FALSE}
+#save(torn.df, hail.df, file = "SVR_WX_Reports.RData")
+```
+
+## Wind Data: 
+
+```{r, eval = FALSE}
+wind.df <- as.data.frame(st_read("C:/Users/SCHRODEZ/OneDrive - Embry-Riddle Aeronautical University/Desktop/Research_Projects/SevereWX_ssp585/1955-2024-wind-initpoint/1955-2024-wind-initpoint/1955-2024-wind-initpoint.shp"))
+```
+```{r}
+wind.df <- wind.df %>%
+  filter(yr >= 1980, #keeping with Chiara Lepore's methodology
+         mag >= 50) #keep only "severe" reports of 50 kts or greater
+```
+
+
+```{r, eval = FALSE}
+wind.df <- wind.df %>%
+  mutate(dy = format(as.Date(date,format="%Y-%m-%d"), "%d"),
+         DateTime = as.POSIXct(paste(yr, mo, dy, time), format = "%Y%m%d%H:%M:%S"),
+         Hour = hour(DateTime),
+         Year = year(DateTime),
+         conv_DateTime = DateTime - as.difftime(6, unit = "hours"),
+         conv_Date = as.Date(as_datetime(ifelse(Hour < 6, (DateTime - 86400), conv_DateTime), tz = "EST")),
+         cas = inj + fat,
+         Ma = factor(month.abb[mo], levels = month.abb[1:12])) %>%
+  sf::st_sf()
+```
+
+```{r, eval = FALSE}
+#save(torn.df, hail.df, wind.df, file = "SVR_WX_Reports.RData")
+```
+
+
+## Count the tornado, wind, and hail reports per county and per state:
+
+We are going to remove Alaska and Hawaii from the data. Bring the focus to the lower 48 states.
+```{r, eval = FALSE}
+sts <- state.name[!state.name %in% c("Alaska", "Hawaii")]
+stateBorders <- us_states(states = sts)
+countyBorders <- us_counties(states = sts)
+```
+
+Make these data frames simple features objects.
+```{r, eval = FALSE}
+stateBorders <- st_as_sf(stateBorders)
+countyBorders <- st_as_sf(countyBorders)
+```
+
+```{r, eval = FALSE}
+tm_shape(stateBorders) + 
+   tm_fill(fill = "white", fill_alpha = 0.75)+ 
+  tm_borders(col = "black") +
+tm_shape(countyBorders) + 
+  tm_borders(col = "gray70", fill_alpha = 0.1) +
+  tm_compass(size = 3, 
+             fontsize = 1, 
+             color.dark = "gray70",
+             position = c("left", "bottom")) +   
+  tm_scalebar(text.size = 0.8, 
+              lwd = 3, 
+              color.dark = "gray70",
+             position = c("left", "bottom")) +
+   tm_layout(legend.frame = FALSE,
+            inner.margins = c(.05, .05, .05, .05), #S, W, N, E
+            legend.bg.color = "white", legend.text.size = .5)
+```
+
+```{r, eval = FALSE}
+#Make sure they have the same CRS
+countyBorders<- st_transform(countyBorders,  
+                            crs = st_crs(torn.df))
+
+# Count the number of tornadoes in each county
+gI_T <- st_intersects(torn.df, countyBorders, sparse = FALSE)
+gI_W <- st_intersects(wind.df, countyBorders, sparse = FALSE)
+gI_H <- st_intersects(hail.df, countyBorders, sparse = FALSE)
+
+# Change the column names
+colnames(gI_T) <- countyBorders$name
+colnames(gI_W) <- countyBorders$name
+colnames(gI_H) <- countyBorders$name
+
+# Add a new column to the counties data
+countyBorders$numTorn <- colSums(gI_T)
+countyBorders$numSVRhail <- colSums(gI_H)
+countyBorders$numSVRwind <- colSums(gI_W)
+```
+
+```{r, eval = FALSE}
+#Make sure they have the same CRS
+stateBorders<- st_transform(stateBorders,  
+                            crs = st_crs(torn.df))
+
+# Count the number of tornadoes in each county
+gI_T <- st_intersects(torn.df, stateBorders, sparse = FALSE)
+gI_W <- st_intersects(wind.df, stateBorders, sparse = FALSE)
+gI_H <- st_intersects(hail.df, stateBorders, sparse = FALSE)
+
+# Change the column names
+colnames(gI_T) <- stateBorders$name
+colnames(gI_W) <- stateBorders$name
+colnames(gI_H) <- stateBorders$name
+
+# Add a new column to the counties data
+stateBorders$numTorn <- colSums(gI_T)
+stateBorders$numSVRhail <- colSums(gI_H)
+stateBorders$numSVRwind <- colSums(gI_W)
+```
+
+```{r, eval = FALSE}
+#save(torn.df, hail.df, wind.df, stateBorders, countyBorders, file = "SVR_WX_Reports.RData")
+```
+
+## Making Maps
+```{r}
+load("SVR_WX_Reports.RData")
+```
+
+
+```{r}
+countytorns <- tm_shape(stateBorders) + 
+   tm_fill(fill = "white", fill_alpha = 0.75)+ 
+  tm_borders(col = "black") +
+  tm_compass(size = 3, 
+             fontsize = 1, 
+             color.dark = "gray70",
+             position = c("left", "bottom")) +   
+  tm_scalebar(text.size = 0.8, 
+              lwd = 3, 
+              color.dark = "gray70",
+             position = c("left", "bottom")) +
+   tm_layout(legend.frame = FALSE,
+            inner.margins = c(.05, .05, .05, .05), #S, W, N, E
+            legend.bg.color = "white", legend.text.size = .5) +
+tm_shape(countyBorders) + 
+  tm_polygons(fill = "numTorn", col = "gray50",
+              tm_scale_intervals(n = 7, # Number of classes you wan
+                                 style = "fixed",
+                                 breaks = c(0,1, 10, 20, 40, 80, 90), 
+                                 labels = c("0", "1 to 9", "10 to 19", "20 to 39", "40 to 79", "> 80"),
+                                 values = "brewer.reds"),
+              fill.legend = tm_legend(title = "Total Tornadoes", 
+                                  orientation = "portrait", 
+                                  legend.bg.color = "white", 
+                                  legend.text.size = .5,
+                                  position = tm_pos_in("right", "bottom"))) 
+```
+
+```{r}
+countyhail <- tm_shape(stateBorders) + 
+   tm_fill(fill = "white", fill_alpha = 0.75)+ 
+  tm_borders(col = "black") +
+  tm_compass(size = 3, 
+             fontsize = 1, 
+             color.dark = "gray70",
+             position = c("left", "bottom")) +   
+  tm_scalebar(text.size = 0.8, 
+              lwd = 3, 
+              color.dark = "gray70",
+             position = c("left", "bottom")) +
+   tm_layout(legend.frame = FALSE,
+            inner.margins = c(.05, .05, .05, .05), #S, W, N, E
+            legend.bg.color = "white", legend.text.size = .5) +
+tm_shape(countyBorders) + 
+  tm_polygons(fill = "numSVRhail", col = "gray50",
+              tm_scale_intervals(n = 7, # Number of classes you wan
+                                 style = "fixed",
+                                 breaks = c(0,1, 25, 50, 100, 200, 500, 1000,1500), 
+                                 labels = c("0", "1 to 24", "25 to 49", "50 to 99", "100 to 199", "200 to 499", "500 to 999", "> 1000"),
+                                 values = "brewer.greens"),
+              fill.legend = tm_legend(title = "Total Tornadoes", 
+                                  orientation = "portrait", 
+                                  legend.bg.color = "white", 
+                                  legend.text.size = .5,
+                                  position = tm_pos_in("right", "bottom"))) 
+```
+
+```{r}
+countywind <- tm_shape(stateBorders) + 
+   tm_fill(fill = "white", fill_alpha = 0.75)+ 
+  tm_borders(col = "black") +
+  tm_compass(size = 3, 
+             fontsize = 1, 
+             color.dark = "gray70",
+             position = c("left", "bottom")) +   
+  tm_scalebar(text.size = 0.8, 
+              lwd = 3, 
+              color.dark = "gray70",
+             position = c("left", "bottom")) +
+   tm_layout(legend.frame = FALSE,
+            inner.margins = c(.05, .05, .05, .05), #S, W, N, E
+            legend.bg.color = "white", legend.text.size = .5) +
+tm_shape(countyBorders) + 
+  tm_polygons(fill = "numSVRwind", col = "gray50",
+              tm_scale_intervals(n = 7, # Number of classes you wan
+                                 style = "fixed",
+                                 breaks = c(0,1, 25, 50, 100, 200, 500, 1000,1500), 
+                                 labels = c("0", "1 to 24", "25 to 49", "50 to 99", "100 to 199", "200 to 499", "500 to 999", "> 1000"),
+                                 values = "brewer.blues"),
+              fill.legend = tm_legend(title = "Total Tornadoes", 
+                                  orientation = "portrait", 
+                                  legend.bg.color = "white", 
+                                  legend.text.size = .5,
+                                  position = tm_pos_in("right", "bottom"))) 
+```
+
+```{r}
+tmap_arrange(countytorns, countyhail, countywind)
+```
+
+*State Level*
+```{r}
+tm_shape(stateBorders) + 
+  tm_polygons(fill = "numTorn", col = "gray50",
+              tm_scale_intervals(n = 7, # Number of classes you wan
+                                 style = "fixed",
+                                 breaks = c(0,1, 100, 250, 500, 1000, 1500,2500 ), 
+                                 labels = c("0", "1 to 99", "100 to 249", "250 to 499", "500 to 999", "1000 to 1499",  "> 1500"),
+                                 values = "brewer.reds"),
+              fill.legend = tm_legend(title = "Total Tornadoes", 
+                                  orientation = "portrait", 
+                                  legend.bg.color = "white", 
+                                  legend.text.size = .5,
+                                  position = tm_pos_in("right", "bottom"))) +
+  tm_compass(size = 3, 
+             fontsize = 1, 
+             color.dark = "gray70",
+             position = c("left", "bottom")) +   
+  tm_scalebar(text.size = 0.8, 
+              lwd = 3, 
+              color.dark = "gray70",
+             position = c("left", "bottom")) +
+   tm_layout(legend.frame = FALSE,
+            inner.margins = c(.05, .05, .05, .05), #S, W, N, E
+            legend.bg.color = "white", legend.text.size = .5)
+```
