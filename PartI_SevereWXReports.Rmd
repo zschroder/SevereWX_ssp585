@@ -3,6 +3,8 @@ title: "Part I -- Severe Weather Reports"
 author: "Dr. Zoe Searcy"
 date: "2026-04-13"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r}
@@ -215,38 +217,22 @@ load("SVR_WX_Reports.RData")
 
 
 ```{r}
-countytorns <- tm_shape(stateBorders) + 
-   tm_fill(fill = "white", fill_alpha = 0.75)+ 
-  tm_borders(col = "black") +
-  tm_compass(size = 3, 
-             fontsize = 1, 
-             color.dark = "gray70",
-             position = c("left", "bottom")) +   
-  tm_scalebar(text.size = 0.8, 
-              lwd = 3, 
-              color.dark = "gray70",
-             position = c("left", "bottom")) +
-   tm_layout(legend.frame = FALSE,
-            inner.margins = c(.05, .05, .05, .05), #S, W, N, E
-            legend.bg.color = "white", legend.text.size = .5) +
-tm_shape(countyBorders) + 
+countytorns <- tm_shape(countyBorders) + 
   tm_polygons(fill = "numTorn", col = "gray50",
               tm_scale_intervals(n = 7, # Number of classes you wan
                                  style = "fixed",
                                  breaks = c(0,1, 10, 20, 40, 80, 90), 
                                  labels = c("0", "1 to 9", "10 to 19", "20 to 39", "40 to 79", "> 80"),
                                  values = "brewer.reds"),
-              fill.legend = tm_legend(title = "Total Tornadoes", 
+              fill.legend = tm_legend(title = "Reports", 
                                   orientation = "portrait", 
                                   legend.bg.color = "white", 
                                   legend.text.size = .5,
-                                  position = tm_pos_in("right", "bottom"))) 
-```
-
-```{r}
-countyhail <- tm_shape(stateBorders) + 
-   tm_fill(fill = "white", fill_alpha = 0.75)+ 
+                                  position = tm_pos_in("right", "bottom"))) +
+  tm_shape(stateBorders) + 
+   tm_fill(fill = "white", fill_alpha = 0)+ 
   tm_borders(col = "black") +
+  tm_title_in("Tornadoes") +
   tm_compass(size = 3, 
              fontsize = 1, 
              color.dark = "gray70",
@@ -256,26 +242,30 @@ countyhail <- tm_shape(stateBorders) +
               color.dark = "gray70",
              position = c("left", "bottom")) +
    tm_layout(legend.frame = FALSE,
-            inner.margins = c(.05, .05, .05, .05), #S, W, N, E
-            legend.bg.color = "white", legend.text.size = .5) +
-tm_shape(countyBorders) + 
+            inner.margins = c(.05, .05, .15, .05), #S, W, N, E
+            legend.bg.color = "white", legend.text.size = .5) 
+
+
+countytorns
+```
+
+```{r}
+countyhail <- tm_shape(countyBorders) + 
   tm_polygons(fill = "numSVRhail", col = "gray50",
               tm_scale_intervals(n = 7, # Number of classes you wan
                                  style = "fixed",
                                  breaks = c(0,1, 25, 50, 100, 200, 500, 1000,1500), 
                                  labels = c("0", "1 to 24", "25 to 49", "50 to 99", "100 to 199", "200 to 499", "500 to 999", "> 1000"),
                                  values = "brewer.greens"),
-              fill.legend = tm_legend(title = "Total Tornadoes", 
+              fill.legend = tm_legend(title = "Reports", 
                                   orientation = "portrait", 
                                   legend.bg.color = "white", 
                                   legend.text.size = .5,
-                                  position = tm_pos_in("right", "bottom"))) 
-```
-
-```{r}
-countywind <- tm_shape(stateBorders) + 
-   tm_fill(fill = "white", fill_alpha = 0.75)+ 
+                                  position = tm_pos_in("right", "bottom"))) +
+  tm_shape(stateBorders) + 
+   tm_fill(fill = "white", fill_alpha = 0)+ 
   tm_borders(col = "black") +
+  tm_title_in("Hail") +
   tm_compass(size = 3, 
              fontsize = 1, 
              color.dark = "gray70",
@@ -285,40 +275,29 @@ countywind <- tm_shape(stateBorders) +
               color.dark = "gray70",
              position = c("left", "bottom")) +
    tm_layout(legend.frame = FALSE,
-            inner.margins = c(.05, .05, .05, .05), #S, W, N, E
-            legend.bg.color = "white", legend.text.size = .5) +
-tm_shape(countyBorders) + 
+            inner.margins = c(.05, .05, .15, .05), #S, W, N, E
+            legend.bg.color = "white", legend.text.size = .5) 
+  
+countyhail
+```
+
+```{r}
+countywind <- tm_shape(countyBorders) + 
   tm_polygons(fill = "numSVRwind", col = "gray50",
               tm_scale_intervals(n = 7, # Number of classes you wan
                                  style = "fixed",
                                  breaks = c(0,1, 25, 50, 100, 200, 500, 1000,1500), 
                                  labels = c("0", "1 to 24", "25 to 49", "50 to 99", "100 to 199", "200 to 499", "500 to 999", "> 1000"),
                                  values = "brewer.blues"),
-              fill.legend = tm_legend(title = "Total Tornadoes", 
-                                  orientation = "portrait", 
-                                  legend.bg.color = "white", 
-                                  legend.text.size = .5,
-                                  position = tm_pos_in("right", "bottom"))) 
-```
-
-```{r}
-tmap_arrange(countytorns, countyhail, countywind)
-```
-
-*State Level*
-```{r}
-tm_shape(stateBorders) + 
-  tm_polygons(fill = "numTorn", col = "gray50",
-              tm_scale_intervals(n = 7, # Number of classes you wan
-                                 style = "fixed",
-                                 breaks = c(0,1, 100, 250, 500, 1000, 1500,2500 ), 
-                                 labels = c("0", "1 to 99", "100 to 249", "250 to 499", "500 to 999", "1000 to 1499",  "> 1500"),
-                                 values = "brewer.reds"),
-              fill.legend = tm_legend(title = "Total Tornadoes", 
+              fill.legend = tm_legend(title = "Reports", 
                                   orientation = "portrait", 
                                   legend.bg.color = "white", 
                                   legend.text.size = .5,
                                   position = tm_pos_in("right", "bottom"))) +
+  tm_shape(stateBorders) + 
+   tm_fill(fill = "white", fill_alpha = 0)+ 
+  tm_borders(col = "black") +
+  tm_title_in("Wind") +
   tm_compass(size = 3, 
              fontsize = 1, 
              color.dark = "gray70",
@@ -328,6 +307,14 @@ tm_shape(stateBorders) +
               color.dark = "gray70",
              position = c("left", "bottom")) +
    tm_layout(legend.frame = FALSE,
-            inner.margins = c(.05, .05, .05, .05), #S, W, N, E
-            legend.bg.color = "white", legend.text.size = .5)
+            inner.margins = c(.05, .05, .15, .05), #S, W, N, E
+            legend.bg.color = "white", legend.text.size = .5) 
+
+countywind
+
 ```
+
+```{r}
+tmap_arrange(countytorns, countyhail, countywind, ncol = 1)
+```
+
