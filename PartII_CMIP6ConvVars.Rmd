@@ -1,0 +1,4246 @@
+---
+title: 'Part II: CMIP6 Convective Variables'
+author: "Dr. Searcy"
+date: "2025-12-16"
+output: html_document
+---
+
+Load the required packages: 
+``` {r, eval = FALSE}
+library(ncdf4)
+library(CFtime)
+
+library(lattice)
+```
+
+## Open NetCDF Files
+### Historical Convective Precipitation
+``` {r, eval = FALSE}
+ncpath <- "C:/Users/SCHRODEZ/OneDrive - Embry-Riddle Aeronautical University/Desktop/Research_Projects/TornActivity_ssp585/"
+ncname <- "CP_monthly_NAmerica_historical" 
+ncfname <- paste(ncpath, ncname, ".nc", sep="")
+library(ncdf4)
+dat_nc <- nc_open(ncfname)
+```
+
+``` {r, eval = FALSE}
+varname = dat_nc$var$ta$longname
+varname <- gsub(" ", "", varname)
+
+time_stamp <- ncvar_get(dat_nc, "time")
+
+model <- ncvar_get(dat_nc, "model")
+
+lons <- ncvar_get(dat_nc,"lon")
+lats <- ncvar_get(dat_nc,"lat")
+
+dat_array <- ncvar_get(dat_nc, "prc")
+
+tunits <- ncatt_get(dat_nc,"time","units")
+
+cf <- CFtime(tunits$value, calendar = "proleptic_gregorian", time_stamp) 
+
+timestamps <- as_timestamp(cf) # get character-string times
+
+time_cf <- parse_timestamps(cf, timestamps) # parse the string into date components
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[1,,,]
+ 
+
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+x <- c(timestamps)
+colnames(PRC_model1) <- c("Lon", "Lat", x)
+
+PRC_model1 %>% pivot_longer(cols=c('Lon', 'Lat'),
+                    names_to='Date',
+                    values_to='prc')
+
+modname <- model[1]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+PRC_model1 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(PRC_model1) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[2,,,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[2]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+PRC_model2 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(PRC_model2) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[3,,,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[3]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+PRC_model3 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(PRC_model3) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[4,,,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[4]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+PRC_model4 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(PRC_model4) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[5,,,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[5]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+PRC_model5 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(PRC_model5) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[6,,,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[6]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+PRC_model6 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(PRC_model6) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[7,,,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[7]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+PRC_model7 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(PRC_model7) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+PRC_historical <- rbind(PRC_model1,PRC_model2,PRC_model3,PRC_model4,PRC_model5,PRC_model6,PRC_model7)
+```
+
+###SSP 585 Convective Precipitation
+
+``` {r, eval = FALSE}
+ncpath <- "C:/Users/SCHRODEZ/OneDrive - Embry-Riddle Aeronautical University/Desktop/Research_Projects/TornActivity_ssp585/"
+ncname <- "CP_monthly_NAmerica_ssp585" 
+ncfname <- paste(ncpath, ncname, ".nc", sep="")
+library(ncdf4)
+dat_nc <- nc_open(ncfname)
+```
+
+``` {r, eval = FALSE}
+varname = dat_nc$var$ta$longname
+varname <- gsub(" ", "", varname)
+
+time_stamp <- ncvar_get(dat_nc, "time")
+
+model <- ncvar_get(dat_nc, "model")
+
+lons <- ncvar_get(dat_nc,"lon")
+lats <- ncvar_get(dat_nc,"lat")
+
+dat_array <- ncvar_get(dat_nc, "prc")
+
+tunits <- ncatt_get(dat_nc,"time","units")
+
+cf <- CFtime(tunits$value, calendar = "proleptic_gregorian", time_stamp) 
+
+timestamps <- as_timestamp(cf) # get character-string times
+
+time_cf <- parse_timestamps(cf, timestamps) # parse the string into date components
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[1,,,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[1]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+PRC_model1 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(PRC_model1) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[2,,,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[2]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+PRC_model2 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(PRC_model2) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[3,,,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[3]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+PRC_model3 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(PRC_model3) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[4,,,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[4]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+PRC_model4 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(PRC_model4) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[5,,,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[5]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+PRC_model5 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(PRC_model5) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[6,,,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[6]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+PRC_model6 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(PRC_model6) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[7,,,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[7]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+PRC_model7 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(PRC_model7) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+PRC_ssp585 <- rbind(PRC_model1,PRC_model2,PRC_model3,PRC_model4,PRC_model5,PRC_model6,PRC_model7)
+```
+
+### SH06 Historical
+
+``` {r, eval = FALSE}
+ncpath <- "C:/Users/SCHRODEZ/OneDrive - Embry-Riddle Aeronautical University/Desktop/Research_Projects/TornActivity_ssp585/"
+ncname <- "Shear_monthly_NAmerica_historical" 
+ncfname <- paste(ncpath, ncname, ".nc", sep="")
+library(ncdf4)
+dat_nc <- nc_open(ncfname)
+```
+
+``` {r, eval = FALSE}
+time_stamp <- ncvar_get(dat_nc, "time")
+
+model <- ncvar_get(dat_nc, "model")
+
+lons <- ncvar_get(dat_nc,"lon")
+lats <- ncvar_get(dat_nc,"lat")
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_array <- ncvar_get(dat_nc, "S06")
+
+tunits <- ncatt_get(dat_nc,"time","units")
+
+cf <- CFtime(tunits$value, calendar = "proleptic_gregorian", time_stamp) 
+
+timestamps <- as_timestamp(cf) # get character-string times
+
+time_cf <- parse_timestamps(cf, timestamps) # parse the string into date components
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,,1]
+
+dat_long <- as.vector(dat_array2)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[1]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+S06_model1 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(S06_model1) <- c("Lon", "Lat", x, "Model")
+
+head(S06_model1)
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,,2]
+
+dat_long <- as.vector(dat_array2)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[2]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+S06_model2 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(S06_model2) <- c("Lon", "Lat", x, "Model")
+
+head(S06_model2)
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,,3]
+
+dat_long <- as.vector(dat_array2)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[3]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+S06_model3 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(S06_model3) <- c("Lon", "Lat", x, "Model")
+
+head(S06_model3)
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,,4]
+
+dat_long <- as.vector(dat_array2)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[4]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+S06_model4 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(S06_model4) <- c("Lon", "Lat", x, "Model")
+
+head(S06_model4)
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,,5]
+
+dat_long <- as.vector(dat_array2)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[5]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+S06_model5 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(S06_model5) <- c("Lon", "Lat", x, "Model")
+
+head(S06_model5)
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,,6]
+
+dat_long <- as.vector(dat_array2)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[6]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+S06_model6 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(S06_model6) <- c("Lon", "Lat", x, "Model")
+
+head(S06_model6)
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,,7]
+
+dat_long <- as.vector(dat_array2)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[7]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+S06_model7 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(S06_model7) <- c("Lon", "Lat", x, "Model")
+
+head(S06_model7)
+```
+
+``` {r, eval = FALSE}
+S06_historical <- rbind(S06_model1,S06_model2,S06_model3,S06_model4,S06_model5,S06_model6,S06_model7)
+```
+
+###SH06 ssp585
+
+
+``` {r, eval = FALSE}
+ncpath <- "C:/Users/SCHRODEZ/OneDrive - Embry-Riddle Aeronautical University/Desktop/Research_Projects/TornActivity_ssp585/"
+ncname <- "Shear_monthly_NAmerica_ssp585" 
+ncfname <- paste(ncpath, ncname, ".nc", sep="")
+library(ncdf4)
+dat_nc <- nc_open(ncfname)
+```
+
+``` {r, eval = FALSE}
+time_stamp <- ncvar_get(dat_nc, "time")
+
+model <- ncvar_get(dat_nc, "model")
+
+lons <- ncvar_get(dat_nc,"lon")
+lats <- ncvar_get(dat_nc,"lat")
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_array <- ncvar_get(dat_nc, "S06")
+
+tunits <- ncatt_get(dat_nc,"time","units")
+
+cf <- CFtime(tunits$value, calendar = "proleptic_gregorian", time_stamp) 
+
+timestamps <- as_timestamp(cf) # get character-string times
+
+time_cf <- parse_timestamps(cf, timestamps) # parse the string into date components
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[1,,,]
+
+dat_long <- as.vector(dat_array2)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[1]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+S06_model1 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(S06_model1) <- c("Lon", "Lat", x, "Model")
+
+head(S06_model1)
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[2,,,]
+
+dat_long <- as.vector(dat_array2)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[2]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+S06_model2 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(S06_model2) <- c("Lon", "Lat", x, "Model")
+
+head(S06_model2)
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[3,,,]
+
+dat_long <- as.vector(dat_array2)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[3]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+S06_model3 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(S06_model3) <- c("Lon", "Lat", x, "Model")
+
+head(S06_model3)
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[4,,,]
+
+dat_long <- as.vector(dat_array2)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[4]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+S06_model4 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(S06_model4) <- c("Lon", "Lat", x, "Model")
+
+head(S06_model4)
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[5,,,]
+
+dat_long <- as.vector(dat_array2)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[5]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+S06_model5 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(S06_model5) <- c("Lon", "Lat", x, "Model")
+
+head(S06_model5)
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[6,,,]
+
+dat_long <- as.vector(dat_array2)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[6]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+S06_model6 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(S06_model6) <- c("Lon", "Lat", x, "Model")
+
+head(S06_model6)
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[7,,,]
+
+dat_long <- as.vector(dat_array2)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[7]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+S06_model7 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(S06_model7) <- c("Lon", "Lat", x, "Model")
+
+head(S06_model7)
+```
+
+``` {r, eval = FALSE}
+S06_ssp585 <- rbind(S06_model1,S06_model2,S06_model3,S06_model4,S06_model5,S06_model6,S06_model7)
+```
+
+### Historical Convective
+
+### CAPE ml500 historical
+
+``` {r, eval = FALSE}
+ncpath <- "C:/Users/SCHRODEZ/OneDrive - Embry-Riddle Aeronautical University/Desktop/Research_Projects/TornActivity_ssp585/"
+ncname <- "Convective_monthly_NAmerica_historical" 
+ncfname <- paste(ncpath, ncname, ".nc", sep="")
+library(ncdf4)
+dat_nc <- nc_open(ncfname)
+```
+
+``` {r, eval = FALSE}
+time_stamp <- ncvar_get(dat_nc, "time")
+
+model <- ncvar_get(dat_nc, "model")
+
+lons <- ncvar_get(dat_nc,"lon")
+lats <- ncvar_get(dat_nc,"lat")
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_array <- ncvar_get(dat_nc, "cape_ml500")
+
+tunits <- ncatt_get(dat_nc,"time","units")
+
+cf <- CFtime(tunits$value, calendar = "proleptic_gregorian", time_stamp) 
+
+timestamps <- as_timestamp(cf) # get character-string times
+
+time_cf <- parse_timestamps(cf, timestamps) # parse the string into date components
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,1,]
+
+dat_long <- as.vector(dat_array2)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[1]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+CAPE_ml500_model1 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(CAPE_ml500_model1) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,2,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[2]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+CAPE_ml500_model2 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(CAPE_ml500_model2) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,3,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[3]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+CAPE_ml500_model3 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(CAPE_ml500_model3) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,4,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[4]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+CAPE_ml500_model4 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(CAPE_ml500_model4) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,5,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[5]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+CAPE_ml500_model5 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(CAPE_ml500_model5) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,6,]
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[6]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+CAPE_ml500_model6 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(CAPE_ml500_model6) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,7,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[7]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+CAPE_ml500_model7 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(CAPE_ml500_model7) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+CAPE_ml500_historical <- rbind(CAPE_ml500_model1,CAPE_ml500_model2,CAPE_ml500_model3,CAPE_ml500_model4,CAPE_ml500_model5,CAPE_ml500_model6,CAPE_ml500_model7)
+```
+
+CAPE_s
+
+
+``` {r, eval = FALSE}
+dat_array <- ncvar_get(dat_nc, "cape_s")
+
+dat_array2 <- dat_array[,,1,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[1]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+CAPE_s_model1 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(CAPE_s_model1) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,2,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[2]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+CAPE_s_model2 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(CAPE_s_model2) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,3,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[3]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+CAPE_s_model3 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(CAPE_s_model3) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,4,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[4]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+CAPE_s_model4 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(CAPE_s_model4) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,5,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[5]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+CAPE_s_model5 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(CAPE_s_model5) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,6,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[6]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+CAPE_s_model6 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(CAPE_s_model6) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,7,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[7]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+CAPE_s_model7 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(CAPE_s_model7) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+CAPE_s_historical <- rbind(CAPE_s_model1,CAPE_s_model2,CAPE_s_model3,CAPE_s_model4,CAPE_s_model5,CAPE_s_model6,CAPE_s_model7)
+```
+
+CIN ML500
+
+
+``` {r, eval = FALSE}
+dat_array <- ncvar_get(dat_nc, "cin_ml500")
+
+dat_array2 <- dat_array[,,1,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[1]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+cin_ml500_model1 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(cin_ml500_model1) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,2,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[2]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+cin_ml500_model2 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(cin_ml500_model2) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,3,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[3]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+cin_ml500_model3 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(cin_ml500_model3) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,4,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[4]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+cin_ml500_model4 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(cin_ml500_model4) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,5,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[5]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+cin_ml500_model5 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(cin_ml500_model5) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,6,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[6]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+cin_ml500_model6 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(cin_ml500_model6) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,7,]
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[7]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+cin_ml500_model7 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(cin_ml500_model7) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+cin_ml500_historical <- rbind(cin_ml500_model1,cin_ml500_model2,cin_ml500_model3,cin_ml500_model4,cin_ml500_model5,cin_ml500_model6,cin_ml500_model7)
+```
+
+cin_s
+
+
+``` {r, eval = FALSE}
+dat_array <- ncvar_get(dat_nc, "cin_s")
+
+dat_array2 <- dat_array[,,1,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[1]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+cin_s_model1 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(cin_s_model1) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,2,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[2]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+cin_s_model2 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(cin_s_model2) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,3,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[3]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+cin_s_model3 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(cin_s_model3) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,4,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[4]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+cin_s_model4 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(cin_s_model4) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,5,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[5]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+cin_s_model5 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(cin_s_model5) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,6,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[6]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+cin_s_model6 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(cin_s_model6) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,7,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[7]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+cin_s_model7 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(cin_s_model7) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+cin_s_historical <- rbind(cin_s_model1,cin_s_model2,cin_s_model3,cin_s_model4,cin_s_model5,cin_s_model6,cin_s_model7)
+```
+
+srh_lm1km
+
+
+``` {r, eval = FALSE}
+dat_array <- ncvar_get(dat_nc, "srh_lm1km")
+
+dat_array2 <- dat_array[,,1,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[1]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_lm1km_model1 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_lm1km_model1) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,2,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[2]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_lm1km_model2 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_lm1km_model2) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,3,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[3]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_lm1km_model3 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_lm1km_model3) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,4,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[4]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_lm1km_model4 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_lm1km_model4) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,5,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[5]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_lm1km_model5 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_lm1km_model5) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,6,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[6]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_lm1km_model6 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_lm1km_model6) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,7,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[7]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_lm1km_model7 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_lm1km_model7) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+srh_lm1km_historical <- rbind(srh_lm1km_model1,srh_lm1km_model2,srh_lm1km_model3,srh_lm1km_model4,srh_lm1km_model5,srh_lm1km_model6,srh_lm1km_model7)
+```
+
+srh_lm3km
+
+
+``` {r, eval = FALSE}
+dat_array <- ncvar_get(dat_nc, "srh_lm3km")
+
+dat_array2 <- dat_array[,,1,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[1]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_lm3km_model1 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_lm3km_model1) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,2,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[2]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_lm3km_model2 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_lm3km_model2) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,3,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[3]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_lm3km_model3 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_lm3km_model3) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,4,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[4]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_lm3km_model4 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_lm3km_model4) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,5,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[5]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_lm3km_model5 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_lm3km_model5) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,6,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[6]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_lm3km_model6 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_lm3km_model6) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,7,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[7]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_lm3km_model7 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_lm3km_model7) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+srh_lm3km_historical <- rbind(srh_lm3km_model1,srh_lm3km_model2,srh_lm3km_model3,srh_lm3km_model4,srh_lm3km_model5,srh_lm3km_model6,srh_lm3km_model7)
+```
+
+srh_rm3km
+
+
+``` {r, eval = FALSE}
+dat_array <- ncvar_get(dat_nc, "srh_rm3km")
+
+dat_array2 <- dat_array[,,1,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[1]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_rm3km_model1 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_rm3km_model1) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,2,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[2]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_rm3km_model2 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_rm3km_model2) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,3,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[3]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_rm3km_model3 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_rm3km_model3) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,4,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[4]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_rm3km_model4 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_rm3km_model4) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,5,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[5]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_rm3km_model5 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_rm3km_model5) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,6,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[6]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_rm3km_model6 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_rm3km_model6) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,7,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[7]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_rm3km_model7 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_rm3km_model7) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+srh_rm3km_historical <- rbind(srh_rm3km_model1,srh_rm3km_model2,srh_rm3km_model3,srh_rm3km_model4,srh_rm3km_model5,srh_rm3km_model6,srh_rm3km_model7)
+```
+
+srh_rm1km
+
+
+``` {r, eval = FALSE}
+dat_array <- ncvar_get(dat_nc, "srh_rm1km")
+
+dat_array2 <- dat_array[,,1,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[1]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_rm1km_model1 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_rm1km_model1) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,2,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[2]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_rm1km_model2 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_rm1km_model2) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,3,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[3]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_rm1km_model3 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_rm1km_model3) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,4,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[4]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_rm1km_model4 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_rm1km_model4) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,5,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[5]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_rm1km_model5 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_rm1km_model5) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,6,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[6]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_rm1km_model6 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_rm1km_model6) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,7,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[7]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_rm1km_model7 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_rm1km_model7) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+srh_rm1km_historical <- rbind(srh_rm1km_model1,srh_rm1km_model2,srh_rm1km_model3,srh_rm1km_model4,srh_rm1km_model5,srh_rm1km_model6,srh_rm1km_model7)
+```
+
+### SSP 585 Convective
+
+### CAPE ml500 SSP585
+
+``` {r, eval = FALSE}
+ncpath <- "C:/Users/SCHRODEZ/OneDrive - Embry-Riddle Aeronautical University/Desktop/Research_Projects/TornActivity_ssp585/"
+ncname <- "Convective_monthly_NAmerica_ssp585" 
+ncfname <- paste(ncpath, ncname, ".nc", sep="")
+library(ncdf4)
+dat_nc <- nc_open(ncfname)
+```
+
+``` {r, eval = FALSE}
+time_stamp <- ncvar_get(dat_nc, "time")
+
+model <- ncvar_get(dat_nc, "model")
+
+lons <- ncvar_get(dat_nc,"lon")
+lats <- ncvar_get(dat_nc,"lat")
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_array <- ncvar_get(dat_nc, "cape_ml500")
+
+tunits <- ncatt_get(dat_nc,"time","units")
+
+cf <- CFtime(tunits$value, calendar = "proleptic_gregorian", time_stamp) 
+
+timestamps <- as_timestamp(cf) # get character-string times
+
+time_cf <- parse_timestamps(cf, timestamps) # parse the string into date components
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,1,]
+
+dat_long <- as.vector(dat_array2)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[1]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+CAPE_ml500_model1 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(CAPE_ml500_model1) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,2,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[2]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+CAPE_ml500_model2 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(CAPE_ml500_model2) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,3,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[3]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+CAPE_ml500_model3 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(CAPE_ml500_model3) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,4,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[4]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+CAPE_ml500_model4 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(CAPE_ml500_model4) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,5,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[5]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+CAPE_ml500_model5 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(CAPE_ml500_model5) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,6,]
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[6]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+CAPE_ml500_model6 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(CAPE_ml500_model6) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,7,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[7]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+CAPE_ml500_model7 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(CAPE_ml500_model7) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+CAPE_ml500_ssp585 <- rbind(CAPE_ml500_model1,CAPE_ml500_model2,CAPE_ml500_model3,CAPE_ml500_model4,CAPE_ml500_model5,CAPE_ml500_model6,CAPE_ml500_model7)
+```
+
+CAPE_s
+
+
+``` {r, eval = FALSE}
+dat_array <- ncvar_get(dat_nc, "cape_s")
+
+dat_array2 <- dat_array[,,1,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[1]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+CAPE_s_model1 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(CAPE_s_model1) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,2,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[2]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+CAPE_s_model2 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(CAPE_s_model2) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,3,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[3]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+CAPE_s_model3 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(CAPE_s_model3) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,4,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[4]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+CAPE_s_model4 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(CAPE_s_model4) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,5,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[5]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+CAPE_s_model5 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(CAPE_s_model5) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,6,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[6]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+CAPE_s_model6 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(CAPE_s_model6) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,7,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[7]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+CAPE_s_model7 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(CAPE_s_model7) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+CAPE_s_ssp585 <- rbind(CAPE_s_model1,CAPE_s_model2,CAPE_s_model3,CAPE_s_model4,CAPE_s_model5,CAPE_s_model6,CAPE_s_model7)
+```
+
+CIN ML500
+
+
+``` {r, eval = FALSE}
+dat_array <- ncvar_get(dat_nc, "cin_ml500")
+
+dat_array2 <- dat_array[,,1,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[1]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+cin_ml500_model1 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(cin_ml500_model1) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,2,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[2]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+cin_ml500_model2 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(cin_ml500_model2) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,3,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[3]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+cin_ml500_model3 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(cin_ml500_model3) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,4,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[4]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+cin_ml500_model4 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(cin_ml500_model4) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,5,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[5]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+cin_ml500_model5 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(cin_ml500_model5) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,6,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[6]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+cin_ml500_model6 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(cin_ml500_model6) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,7,]
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[7]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+cin_ml500_model7 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(cin_ml500_model7) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+cin_ml500_ssp585 <- rbind(cin_ml500_model1,cin_ml500_model2,cin_ml500_model3,cin_ml500_model4,cin_ml500_model5,cin_ml500_model6,cin_ml500_model7)
+```
+
+cin_s
+
+
+``` {r, eval = FALSE}
+dat_array <- ncvar_get(dat_nc, "cin_s")
+
+dat_array2 <- dat_array[,,1,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[1]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+cin_s_model1 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(cin_s_model1) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,2,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[2]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+cin_s_model2 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(cin_s_model2) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,3,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[3]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+cin_s_model3 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(cin_s_model3) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,4,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[4]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+cin_s_model4 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(cin_s_model4) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,5,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[5]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+cin_s_model5 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(cin_s_model5) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,6,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[6]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+cin_s_model6 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(cin_s_model6) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,7,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[7]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+cin_s_model7 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(cin_s_model7) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+cin_s_ssp585 <- rbind(cin_s_model1,cin_s_model2,cin_s_model3,cin_s_model4,cin_s_model5,cin_s_model6,cin_s_model7)
+```
+
+srh_lm1km
+
+
+``` {r, eval = FALSE}
+dat_array <- ncvar_get(dat_nc, "srh_lm1km")
+
+dat_array2 <- dat_array[,,1,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[1]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_lm1km_model1 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_lm1km_model1) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,2,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[2]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_lm1km_model2 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_lm1km_model2) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,3,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[3]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_lm1km_model3 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_lm1km_model3) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,4,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[4]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_lm1km_model4 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_lm1km_model4) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,5,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[5]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_lm1km_model5 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_lm1km_model5) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,6,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[6]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_lm1km_model6 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_lm1km_model6) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,7,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[7]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_lm1km_model7 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_lm1km_model7) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+srh_lm1km_ssp585 <- rbind(srh_lm1km_model1,srh_lm1km_model2,srh_lm1km_model3,srh_lm1km_model4,srh_lm1km_model5,srh_lm1km_model6,srh_lm1km_model7)
+```
+
+srh_lm3km
+
+
+``` {r, eval = FALSE}
+dat_array <- ncvar_get(dat_nc, "srh_lm3km")
+
+dat_array2 <- dat_array[,,1,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[1]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_lm3km_model1 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_lm3km_model1) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,2,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[2]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_lm3km_model2 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_lm3km_model2) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,3,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[3]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_lm3km_model3 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_lm3km_model3) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,4,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[4]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_lm3km_model4 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_lm3km_model4) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,5,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[5]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_lm3km_model5 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_lm3km_model5) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,6,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[6]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_lm3km_model6 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_lm3km_model6) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,7,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[7]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_lm3km_model7 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_lm3km_model7) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+srh_lm3km_ssp585 <- rbind(srh_lm3km_model1,srh_lm3km_model2,srh_lm3km_model3,srh_lm3km_model4,srh_lm3km_model5,srh_lm3km_model6,srh_lm3km_model7)
+```
+
+srh_rm3km
+
+
+``` {r, eval = FALSE}
+dat_array <- ncvar_get(dat_nc, "srh_rm3km")
+
+dat_array2 <- dat_array[,,1,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[1]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_rm3km_model1 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_rm3km_model1) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,2,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[2]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_rm3km_model2 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_rm3km_model2) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,3,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[3]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_rm3km_model3 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_rm3km_model3) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,4,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[4]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_rm3km_model4 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_rm3km_model4) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,5,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[5]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_rm3km_model5 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_rm3km_model5) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,6,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[6]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_rm3km_model6 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_rm3km_model6) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,7,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[7]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_rm3km_model7 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_rm3km_model7) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+srh_rm3km_ssp585 <- rbind(srh_rm3km_model1,srh_rm3km_model2,srh_rm3km_model3,srh_rm3km_model4,srh_rm3km_model5,srh_rm3km_model6,srh_rm3km_model7)
+```
+
+srh_rm1km
+
+
+``` {r, eval = FALSE}
+dat_array <- ncvar_get(dat_nc, "srh_rm1km")
+
+dat_array2 <- dat_array[,,1,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[1]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_rm1km_model1 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_rm1km_model1) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,2,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[2]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_rm1km_model2 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_rm1km_model2) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,3,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[3]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_rm1km_model3 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_rm1km_model3) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,4,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[4]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_rm1km_model4 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_rm1km_model4) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,5,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[5]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_rm1km_model5 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_rm1km_model5) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,6,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[6]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_rm1km_model6 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_rm1km_model6) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+dat_array2 <- dat_array[,,7,]
+
+ 
+
+dat_long <- as.vector(dat_array2)
+
+nlon= (dim(lons))
+nlat = dim(lats)
+ntime = dim(time_stamp)
+nmodels = dim(model)
+
+dat_mat = matrix(dat_long, nrow = nlon * nlat, ncol = ntime)
+
+lonlat <- as.matrix(expand.grid(lons,lats))
+dat.df <- data.frame(cbind(lonlat,dat_mat))
+
+modname <- model[7]
+model_name = as.data.frame(rep(modname, dim(dat.df)[1]))
+srh_rm1km_model7 <- cbind(dat.df,model_name)
+
+x <- c(timestamps)
+colnames(srh_rm1km_model7) <- c("Lon", "Lat", x, "Model")
+```
+
+``` {r, eval = FALSE}
+srh_rm1km_ssp585 <- rbind(srh_rm1km_model1,srh_rm1km_model2,srh_rm1km_model3,srh_rm1km_model4,srh_rm1km_model5,srh_rm1km_model6,srh_rm1km_model7)
+```
+
+
+## Create and Save RData Files
+
+``` {r, eval = FALSE}
+#save(CAPE_ml500_historical, CAPE_s_historical, cin_ml500_historical, cin_s_historical, PRC_historical, S06_historical, srh_lm1km_historical, srh_lm3km_historical, srh_rm1km_historical, srh_rm3km_historical, file = "HistoricalData.RData")
+
+save(CAPE_ml500_ssp585, CAPE_s_ssp585, cin_ml500_ssp585, cin_s_ssp585, PRC_ssp585, S06_ssp585, srh_lm1km_ssp585, srh_lm3km_ssp585, srh_rm1km_ssp585, srh_rm3km_ssp585, file = "ssp585Data2.RData")
+```
+
+## Historical Data
+``` {r, eval = FALSE}
+load("HistoricalData.RData")
+```
+
+```{r, eval = FALSE}
+head(PRC_historical)
+```
+
+```{r, eval = FALSE}
+library(tidyr)
+library(dplyr)
+```
+
+CAPE_ml500_historical
+CAPE_s_historical
+cin_ml500_historical
+cin_s_historical
+PRC_historical
+S06_historical
+srh_lm1km_historical
+srh_lm3km_historical
+srh_rm1km_historical
+srh_rm3km_historical
+
+Create an *ID* column of the Model, Latitude, and Longitude. This will be used during the pivot stage when transfer the data from wide to long format.
+```{r, eval = FALSE}
+PRC_historical <- PRC_historical %>%
+  mutate(ID = as.factor(paste(Model,Lon,Lat)))
+
+CAPE_ml500_historical <- CAPE_ml500_historical %>%
+  mutate(ID = as.factor(paste(Model,Lon,Lat)))
+
+CAPE_s_historical <- CAPE_s_historical %>%
+  mutate(ID = as.factor(paste(Model,Lon,Lat)))
+
+cin_ml500_historical <- cin_ml500_historical %>%
+  mutate(ID = as.factor(paste(Model,Lon,Lat)))
+
+cin_s_historical <- cin_s_historical %>%
+  mutate(ID = as.factor(paste(Model,Lon,Lat)))
+
+S06_historical <- S06_historical %>%
+  mutate(ID = as.factor(paste(Model,Lon,Lat)))
+
+srh_lm1km_historical <- srh_lm1km_historical %>%
+  mutate(ID = as.factor(paste(Model,Lon,Lat)))
+
+srh_lm3km_historical <- srh_lm3km_historical %>%
+  mutate(ID = as.factor(paste(Model,Lon,Lat)))
+
+srh_rm1km_historical <- srh_rm1km_historical %>%
+  mutate(ID = as.factor(paste(Model,Lon,Lat)))
+
+srh_rm3km_historical <- srh_rm3km_historical %>%
+  mutate(ID = as.factor(paste(Model,Lon,Lat)))
+```
+
+Convert into a longer data frame and create a column called **ID_new** that includes the ID and Date. 
+```{r, eval = FALSE}
+PRC_historical <- PRC_historical %>% pivot_longer(cols= colnames(PRC_historical)[3:422],
+                    names_to='Date',
+                    values_to='prc') 
+
+PRC_historical <- PRC_historical%>%
+  mutate(ID_new = as.factor(paste(ID,Date))) %>%
+  arrange("ID_new")
+####################################
+CAPE_ml500_historical <- CAPE_ml500_historical %>% pivot_longer(cols= colnames(CAPE_ml500_historical)[3:422],
+                    names_to='Date',
+                    values_to='mlcape')
+CAPE_ml500_historical <- CAPE_ml500_historical %>%
+  mutate(ID_new = as.factor(paste(ID,Date))) %>%
+  arrange("ID_new")
+#######################################
+CAPE_s_historical <- CAPE_s_historical %>% pivot_longer(cols= colnames(CAPE_s_historical)[3:422],
+                    names_to='Date',
+                    values_to='sfcape')
+CAPE_s_historical <- CAPE_s_historical %>%
+  mutate(ID_new = as.factor(paste(ID,Date))) %>%
+  arrange("ID_new")
+#################################
+cin_ml500_historical <- cin_ml500_historical %>% pivot_longer(cols= colnames(cin_ml500_historical)[3:422],
+                    names_to='Date',
+                    values_to='mlcin')
+cin_ml500_historical <- cin_ml500_historical %>%
+  mutate(ID_new = as.factor(paste(ID,Date))) %>%
+  arrange("ID_new")
+#####################################
+cin_s_historical <- cin_s_historical %>% pivot_longer(cols= colnames(cin_s_historical)[3:422],
+                    names_to='Date',
+                    values_to='sfcin')
+
+cin_s_historical <- cin_s_historical %>%
+  mutate(ID_new = as.factor(paste(ID,Date))) %>%
+  arrange("ID_new")
+#########################################
+S06_historical <- S06_historical %>% pivot_longer(cols= colnames(S06_historical)[3:422],
+                    names_to='Date',
+                    values_to='shear0_6')
+
+S06_historical <- S06_historical %>%
+  mutate(ID_new = as.factor(paste(ID,Date))) %>%
+  arrange("ID_new")
+###################################
+srh_lm1km_historical <- srh_lm1km_historical %>% pivot_longer(cols= colnames(srh_lm1km_historical)[3:422],
+                    names_to='Date',
+                    values_to='SRH_LM1km')
+
+srh_lm1km_historical <- srh_lm1km_historical %>%
+  mutate(ID_new = as.factor(paste(ID,Date))) %>%
+  arrange("ID_new")
+#################################
+srh_lm3km_historical <- srh_lm3km_historical %>% pivot_longer(cols= colnames(srh_lm3km_historical)[3:422],
+                    names_to='Date',
+                    values_to='SRH_LM3km')
+
+srh_lm3km_historical <- srh_lm3km_historical %>%
+  mutate(ID_new = as.factor(paste(ID,Date))) %>%
+  arrange("ID_new")
+########################################
+srh_rm1km_historical <- srh_rm1km_historical %>% pivot_longer(cols= colnames(srh_rm1km_historical)[3:422],
+                    names_to='Date',
+                    values_to='SRH_RM1km')
+
+srh_rm1km_historical <- srh_rm1km_historical %>%
+  mutate(ID_new = as.factor(paste(ID,Date))) %>%
+  arrange("ID_new")
+
+######################
+srh_rm3km_historical <- srh_rm3km_historical %>% pivot_longer(cols= colnames(srh_rm3km_historical)[3:422],
+                    names_to='Date',
+                    values_to='SRH_RM3km')
+
+srh_rm3km_historical <- srh_rm3km_historical%>%
+  mutate(ID_new = as.factor(paste(ID,Date))) %>%
+  arrange("ID_new")
+```
+
+Merge the data frames together. 
+```{r, eval = FALSE}
+CAPEs <- CAPE_s_historical %>%
+  select(ID_new, sfcape)
+
+test <- merge(CAPE_ml500_historical, CAPEs, by = "ID_new", all.x = TRUE, all.y = FALSE)
+
+
+CINml <- cin_ml500_historical %>%
+  select(ID_new, mlcin)
+
+test <- merge(test, CINml, by = "ID_new", all.x = TRUE, all.y = FALSE)
+########################
+CINs <- cin_s_historical %>%
+  select(ID_new, sfcin)
+
+test <- merge(test, CINs, by = "ID_new", all.x = TRUE, all.y = FALSE)
+########################
+
+PRC <-PRC_historical %>%
+  select(ID_new, prc)
+
+test <- merge(test, PRC, by = "ID_new", all.x = TRUE, all.y = FALSE)
+#########################
+S06 <- S06_historical %>%
+  select(ID_new, shear0_6)
+test <- merge(test, S06, by = "ID_new", all.x = TRUE, all.y = FALSE)
+##########################
+
+SRHL1 <- srh_lm1km_historical %>%
+  select(ID_new, SRH_LM1km)
+
+test <- merge(test, SRHL1, by = "ID_new", all.x = TRUE, all.y = FALSE)
+##########################
+
+SRHL3 <- srh_lm3km_historical %>%
+  select(ID_new, SRH_LM3km)
+
+test <- merge(test, SRHL3, by = "ID_new", all.x = TRUE, all.y = FALSE)
+##########################
+
+SRHR1 <- srh_rm1km_historical %>%
+  select(ID_new, SRH_RM1km)
+
+test <- merge(test, SRHR1, by = "ID_new", all.x = TRUE, all.y = FALSE)
+##########################
+
+SRHR3 <- srh_rm3km_historical %>%
+  select(ID_new, SRH_RM3km)
+
+test <- merge(test, SRHR3, by = "ID_new", all.x = TRUE, all.y = FALSE)
+```
+
+```{r}
+library(lubridate)
+
+historical.df <- historical.df %>% 
+  mutate(Year = year(Date),
+         Month = month(Date))
+```
+
+```{r, eval = FALSE}
+#save(historical.df, file = "Historical_CMIP6.RData")
+```
+
+
+## SSP585 Data
+```{r, eval = FALSE}
+load("ssp585Data.RData")
+```
+
+Create an *ID* column of the Model, Latitude, and Longitude. This will be used during the pivot stage when transfer the data from wide to long format. 
+```{r, eval = FALSE}
+PRC_ssp585 <- PRC_ssp585 %>%
+  mutate(ID = as.factor(paste(Model,Lon,Lat)))
+
+CAPE_ml500_ssp585 <- CAPE_ml500_ssp585 %>%
+  mutate(ID = as.factor(paste(Model,Lon,Lat)))
+
+CAPE_s_ssp585 <- CAPE_s_ssp585 %>%
+  mutate(ID = as.factor(paste(Model,Lon,Lat)))
+
+cin_ml500_ssp585 <- cin_ml500_ssp585 %>%
+  mutate(ID = as.factor(paste(Model,Lon,Lat)))
+
+cin_s_ssp585 <- cin_s_ssp585 %>%
+  mutate(ID = as.factor(paste(Model,Lon,Lat)))
+
+S06_ssp585 <- S06_ssp585 %>%
+  mutate(ID = as.factor(paste(Model,Lon,Lat)))
+
+srh_lm1km_ssp585 <- srh_lm1km_ssp585 %>%
+  mutate(ID = as.factor(paste(Model,Lon,Lat)))
+
+srh_lm3km_ssp585 <- srh_lm3km_ssp585 %>%
+  mutate(ID = as.factor(paste(Model,Lon,Lat)))
+
+srh_rm1km_ssp585 <- srh_rm1km_ssp585 %>%
+  mutate(ID = as.factor(paste(Model,Lon,Lat)))
+
+srh_rm3km_ssp585 <- srh_rm3km_ssp585 %>%
+  mutate(ID = as.factor(paste(Model,Lon,Lat)))
+```
+
+Convert into a longer data frame and create a column called **ID_new** that includes the ID and Date. 
+```{r, eval = FALSE}
+PRC_ssp585 <- PRC_ssp585 %>% pivot_longer(cols= colnames(PRC_ssp585)[3:1034],
+                    names_to='Date',
+                    values_to='prc') 
+
+PRC_ssp585 <- PRC_ssp585%>%
+  mutate(ID_new = as.factor(paste(ID,Date))) %>%
+  arrange("ID_new")
+####################################
+CAPE_ml500_ssp585 <- CAPE_ml500_ssp585 %>% pivot_longer(cols= colnames(CAPE_ml500_ssp585)[3:1034],
+                    names_to='Date',
+                    values_to='mlcape')
+CAPE_ml500_ssp585 <- CAPE_ml500_ssp585 %>%
+  mutate(ID_new = as.factor(paste(ID,Date))) %>%
+  arrange("ID_new")
+#######################################
+CAPE_s_ssp585 <- CAPE_s_ssp585 %>% pivot_longer(cols= colnames(CAPE_s_ssp585)[3:1034],
+                    names_to='Date',
+                    values_to='sfcape')
+CAPE_s_ssp585 <- CAPE_s_ssp585 %>%
+  mutate(ID_new = as.factor(paste(ID,Date))) %>%
+  arrange("ID_new")
+#################################
+cin_ml500_ssp585 <- cin_ml500_ssp585 %>% pivot_longer(cols= colnames(cin_ml500_ssp585)[3:1034],
+                    names_to='Date',
+                    values_to='mlcin')
+cin_ml500_ssp585 <- cin_ml500_ssp585 %>%
+  mutate(ID_new = as.factor(paste(ID,Date))) %>%
+  arrange("ID_new")
+#####################################
+cin_s_ssp585 <- cin_s_ssp585 %>% pivot_longer(cols= colnames(cin_s_ssp585)[3:1034],
+                    names_to='Date',
+                    values_to='sfcin')
+
+cin_s_ssp585 <- cin_s_ssp585 %>%
+  mutate(ID_new = as.factor(paste(ID,Date))) %>%
+  arrange("ID_new")
+
+#########################################
+S06_ssp585 <- S06_ssp585 %>% pivot_longer(cols= colnames(S06_ssp585)[3:1034],
+                    names_to='Date',
+                    values_to='shear0_6')
+
+S06_ssp585 <- S06_ssp585 %>%
+  mutate(ID_new = as.factor(paste(ID,Date))) %>%
+  arrange("ID_new")
+###################################
+srh_lm1km_ssp585 <- srh_lm1km_ssp585 %>% pivot_longer(cols= colnames(srh_lm1km_ssp585)[3:1034],
+                    names_to='Date',
+                    values_to='SRH_LM1km')
+
+srh_lm1km_ssp585 <- srh_lm1km_ssp585 %>%
+  mutate(ID_new = as.factor(paste(ID,Date))) %>%
+  arrange("ID_new")
+#################################
+srh_lm3km_ssp585 <- srh_lm3km_ssp585 %>% pivot_longer(cols= colnames(srh_lm3km_ssp585)[3:1034],
+                    names_to='Date',
+                    values_to='SRH_LM3km')
+
+srh_lm3km_ssp585 <- srh_lm3km_ssp585 %>%
+  mutate(ID_new = as.factor(paste(ID,Date))) %>%
+  arrange("ID_new")
+########################################
+srh_rm1km_ssp585 <- srh_rm1km_ssp585 %>% pivot_longer(cols= colnames(srh_rm1km_ssp585)[3:1034],
+                    names_to='Date',
+                    values_to='SRH_RM1km')
+
+srh_rm1km_ssp585 <- srh_rm1km_ssp585 %>%
+  mutate(ID_new = as.factor(paste(ID,Date))) %>%
+  arrange("ID_new")
+
+######################
+srh_rm3km_ssp585 <- srh_rm3km_ssp585 %>% pivot_longer(cols= colnames(srh_rm3km_ssp585)[3:1034],
+                    names_to='Date',
+                    values_to='SRH_RM3km')
+
+srh_rm3km_ssp585 <- srh_rm3km_ssp585%>%
+  mutate(ID_new = as.factor(paste(ID,Date))) %>%
+  arrange("ID_new")
+```
+
+Merge the data frames together. 
+```{r, eval = FALSE}
+CAPEs <- CAPE_s_ssp585 %>%
+  select(ID_new, sfcape)
+
+test <- merge(CAPE_ml500_ssp585, CAPEs, by = "ID_new", all.x = TRUE, all.y = FALSE)
+
+
+CINml <- cin_ml500_ssp585 %>%
+  select(ID_new, mlcin)
+
+test <- merge(test, CINml, by = "ID_new", all.x = TRUE, all.y = FALSE)
+########################
+CINs <- cin_s_ssp585 %>%
+  select(ID_new, sfcin)
+
+test <- merge(test, CINs, by = "ID_new", all.x = TRUE, all.y = FALSE)
+########################
+
+PRC <-PRC_ssp585 %>%
+  select(ID_new, prc)
+
+test <- merge(test, PRC, by = "ID_new", all.x = TRUE, all.y = FALSE)
+#########################
+S06 <- S06_ssp585 %>%
+  select(ID_new, shear0_6)
+test <- merge(test, S06, by = "ID_new", all.x = TRUE, all.y = FALSE)
+##########################
+
+SRHL1 <- srh_lm1km_ssp585 %>%
+  select(ID_new, SRH_LM1km)
+
+test <- merge(test, SRHL1, by = "ID_new", all.x = TRUE, all.y = FALSE)
+##########################
+
+SRHL3 <- srh_lm3km_ssp585 %>%
+  select(ID_new, SRH_LM3km)
+
+test <- merge(test, SRHL3, by = "ID_new", all.x = TRUE, all.y = FALSE)
+##########################
+
+SRHR1 <- srh_rm1km_ssp585 %>%
+  select(ID_new, SRH_RM1km)
+
+test <- merge(test, SRHR1, by = "ID_new", all.x = TRUE, all.y = FALSE)
+##########################
+
+SRHR3 <- srh_rm3km_ssp585 %>%
+  select(ID_new, SRH_RM3km)
+
+test <- merge(test, SRHR3, by = "ID_new", all.x = TRUE, all.y = FALSE)
+```
+
+```{r, eval = FALSE}
+ssp585.df <- test
+ssp585.df <- ssp585.df %>% 
+  mutate(Year = year(Date),
+         Month = month(Date))
+
+save(ssp585.df, file = "SSP585_CMIP6.RData")
+```
+
+## Historical Data: Make it Spatial
+```{r, eval = FALSE}
+load("Historical_CMIP6.RData")
+
+head(historical.df)
+```
+
+```{r, eval = FALSE}
+historical.df <- st_as_sf(historical.df, coords = c("Lon", "Lat"), crs = 4326)
+```
+
+
+```{r, eval = FALSE}
+hist_grid <- historical.df %>%
+  st_make_grid(cellsize = 1, offset = c(229.5, 24.5))
+
+hist_grid <- rep(hist_grid, 2940)
+```
+
+```{r, eval = FALSE}
+historical.df <- historical.df %>%
+  arrange(Model, Date, Lat2) 
+
+historical.df <- cbind(historical.df, hist_grid)
+```
+
+```{r}
+historical.df$year <- year(ymd(historical.df$Date))
+historical.df$month <- month(ymd(historical.df$Date))
+```
+
+```{r, eval = FALSE}
+#save(historical.df, file = "Historical_CMIP6.RData")
+```
+
+
+
+## SSP585 Data: Make it Spatial
+```{r, eval = FALSE}
+load("SSP585_CMIP6.RData")
+```
+
+```{r, eval = FALSE}
+ssp585.df <- st_as_sf(ssp585.df, coords = c("Lon", "Lat"), crs = 4326)
+```
+
+```{r, eval = FALSE}
+ssp585_grid <- ssp585.df %>%
+  st_make_grid(cellsize = 1, offset = c(229.5, 24.5))
+
+ssp585_grid <- rep(ssp585_grid, 7224)
+```
+
+```{r, eval = FALSE}
+ssp585.df <- ssp585.df %>%
+  arrange(Model, Date, Lat2) 
+
+ssp585.df <- cbind(ssp585.df, hist_grid)
+```
+
+```{r}
+library(lubridate)
+library(dplyr)
+ssp585.df$year <- year(ymd(ssp585.df$Date))
+ssp585.df$month <- month(ymd(ssp585.df$Date))
+```
+
+```{r, eval = FALSE}
+#save(ssp585.df, file = "SSP585_CMIP6.RData")
+```
