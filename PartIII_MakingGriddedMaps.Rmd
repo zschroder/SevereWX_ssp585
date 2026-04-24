@@ -1,0 +1,176 @@
+---
+title: "Part III: Making Gridded Maps"
+author: "Dr. Zoe Searcy"
+date: "2025-11-20"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+library(sf)
+library(dplyr)
+library(tmap)
+library(USAboundaries)
+library(USAboundariesData)
+library(RColorBrewer)
+```
+
+## Gridded Map
+
+Make a 1 degree by 1 degree grid over the contiguous United States. 
+```{r}
+US_grid <- stateBorders %>%
+  st_make_grid(cellsize = 1)
+```
+
+Count the total number of intersections of tornado, hail, and wind reports within each grid cell using the `st_intersects` function. 
+```{r}
+plot(US_grid)
+st_crs(stateBorders)
+st_crs(torn.df)
+
+torn.df <- st_transform(torn.df, 4326)
+hail.df <- st_transform(hail.df, 4326)
+wind.df <- st_transform(wind.df, 4326)
+# Count the number of tornadoes in each grid cell
+gI_T <- st_intersects(torn.df, US_grid, sparse = FALSE)
+
+# Count the number of hail reports in each grid cell
+gI_H <- st_intersects(hail.df, US_grid, sparse = FALSE)
+
+# Count the number of tornadoes in each grid cell
+gI_W <- st_intersects(wind.df, US_grid, sparse = FALSE)
+
+US_grid <- st_as_sf(US_grid)
+# Add a new column to the counties data
+US_grid$tot_Torn <- colSums(gI_T)
+US_grid$tot_Hail <- colSums(gI_H)
+US_grid$tot_Wind <- colSums(gI_W)
+```
+
+Create a color palette for each hazard. Mimic the ones from the SPC severe weather data base. (i.e., red for tornado, green for hail, blue for wind)
+```{r}
+b9 <- brewer.pal(n = 9, name = "Blues")
+blue8 <- c("white", b9[3],b9[4],b9[5],b9[6],b9[7],b9[8],b9[9])
+
+g9 <- brewer.pal(n = 9, name = "Greens")
+green7 <- c("white", g9[3],g9[4],g9[6],g9[7],g9[8],g9[9])
+
+r9 <- brewer.pal(n = 9, name = "Reds")
+red7 <- c("white", r9[3],r9[4],r9[6],r9[7],r9[8],r9[9])
+```
+
+Plot the gridded tornado data. 
+```{r}
+tm_shape(US_grid) + 
+  tm_polygons(fill = "tot_Torn", 
+              fill.scale = tm_scale(breaks = c(0,1,50,100,150,200,250,300), labels = c("0","1 - 49","50 - 99","100 - 149", "150-199", "200 - 249", "250 - 299"), values = red7),
+              fill.legend = tm_legend(title = "Tornadoes", 
+                          orientation = "portrait", 
+                          legend.bg.color = "white", 
+                          legend.text.size = .25,
+                          position = tm_pos_in("right", "bottom"))) +
+  tm_layout(inner.margins = c(0.05, .05, .05, .05))+
+      #tm_title("A", 
+      #     size = 1.5, 
+      #     col = "black", 
+      #     fontface = "bold", 
+     #      position = tm_pos_in("left", "top")) +
+tm_shape(stateBorders, is.master = TRUE) +
+tm_borders(col = "gray10", fill_alpha = 0, lwd = 1.5)
+
+```
+
+Plot the gridded hail data.
+```{r}
+B <- (tm_shape(US_grid) + 
+  tm_polygons(fill = "tot_Hail", 
+              fill.scale = tm_scale(breaks = c(0,1,50,500,1000,1500,2500), labels = c("0","1 - 49","50 - 499","500 - 999", "1000-1499", "1500 - 2500"), values = green7),
+              fill.legend = tm_legend(title = "Hail Reports", 
+                          orientation = "portrait", 
+                          legend.bg.color = "white", 
+                          legend.text.size = .25,
+                          position = tm_pos_in("right", "bottom")))+
+  tm_layout(inner.margins = c(.05, .05, .05, .05))+
+      #tm_title("B", 
+      #     size = 1.5, 
+      #     col = "black", 
+      #     fontface = "bold", 
+      #     position = tm_pos_in("left", "top")) +
+tm_shape(stateBorders, is.master = TRUE) +
+tm_borders(col = "gray10", fill_alpha = 0, lwd = 1.5) )
+
+```
+
+Plot the gridded wind data. 
+```{r}
+C <- tm_shape(US_grid) + 
+  tm_polygons(fill = "tot_Wind", 
+              fill.scale = tm_scale(breaks = c(0,1,500,1000,1500,2000,3000,4000,5000), labels = c("0","1 - 499","500 - 999","1000 - 1499","1500 - 1999","2000 - 2999", "3000 - 3999", "4000 - 5000"), values = blue8),
+              fill.legend = tm_legend(title = "Wind Reports", 
+                          orientation = "portrait", 
+                          legend.bg.color = "white", 
+                          legend.text.size = .25,
+                          position = tm_pos_in("right", "bottom"))) +
+  tm_layout(inner.margins = c(.05, .05, .05, .05))+ #(S,W,N,E)
+    #tm_title("C", 
+    #       size = 1.5, 
+    #       col = "black",
+    #       fontface = "bold", 
+    #       position = tm_pos_in("left", "top")) +
+tm_shape(stateBorders, is.master = TRUE) +
+tm_borders(col = "gray10", fill_alpha = 0, lwd = 1.5)
+
+C
+```
+
+Put the tornado, hail, and wind data on the same figure. 
+```{r}
+tmap_arrange(A, B, C )
+```
+
+
+
+
+
+# Historical Data
+```{r, eval = FALSE}
+load("Historical_CMIP6.RData")
+
+head(historical.df)
+```
+
+```{r}
+decade.df <- historical.df %>%
+  mutate(Decade = (as.numeric(substr(Year, 3, 3)) * 10))
+
+head(decade.df)
+```
+
+```{r}
+ModDec.df <- decade.df %>%
+  #filter(Model == "BCC-CSM2-MR") %>%
+  group_by(Model,Decade) %>%
+  summarize(avg_SFcape = mean(sfcape, na.rm = TRUE),
+            max_SFcape = max(sfcape, na.rm = TRUE),
+            min_SFcape = min(sfcape, na.rm = TRUE),
+            avg_prc = mean(prc, na.rm = TRUE),
+            max_prc = max(prc, na.rm = TRUE),
+            min_prc = min(prc, na.rm = TRUE),
+            avg_shear0_6 = mean(shear0_6, na.rm = TRUE),
+            max_shear0_6 = max(shear0_6, na.rm = TRUE),
+            min_shear0_6 = min(shear0_6, na.rm = TRUE))
+```
+
+```{r, eval = FALSE}
+save(decade.df, ModDec.df, file = "Hist_Decades.RData")
+```
+
+## SSP585 Data
+```{r, eval = FALSE}
+load("SSP585_CMIP6.RData")
+```
+
+
+
