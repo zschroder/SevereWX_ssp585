@@ -315,6 +315,12 @@ countywind
 ```
 
 ```{r}
-tmap_arrange(countytorns, countyhail, countywind, ncol = 1)
+tmap_arrange(countytorns, countyhail, countywind, ncol = 2)
+```
+
+Basic Statistics: 
+```{r}
+#% of tornadoes rated 3 or higher:
+((dim(torn.df %>% filter(mag>=3))[1]) / dim(torn.df)[1]) * 100
 ```
 
