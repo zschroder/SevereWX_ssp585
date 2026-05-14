@@ -63,7 +63,7 @@ red7 <- c("white", r9[3],r9[4],r9[6],r9[7],r9[8],r9[9])
 
 Plot the gridded tornado data. 
 ```{r}
-tm_shape(US_grid) + 
+A <- tm_shape(US_grid) + 
   tm_polygons(fill = "tot_Torn", 
               fill.scale = tm_scale(breaks = c(0,1,50,100,150,200,250,300), labels = c("0","1 - 49","50 - 99","100 - 149", "150-199", "200 - 249", "250 - 299"), values = red7),
               fill.legend = tm_legend(title = "Tornadoes", 
@@ -71,7 +71,7 @@ tm_shape(US_grid) +
                           legend.bg.color = "white", 
                           legend.text.size = .25,
                           position = tm_pos_in("right", "bottom"))) +
-  tm_layout(inner.margins = c(0.05, .05, .05, .05))+
+  tm_layout(inner.margins = c(0.01, .01, .01, .01), frame = FALSE)+
       #tm_title("A", 
       #     size = 1.5, 
       #     col = "black", 
@@ -92,7 +92,7 @@ B <- (tm_shape(US_grid) +
                           legend.bg.color = "white", 
                           legend.text.size = .25,
                           position = tm_pos_in("right", "bottom")))+
-  tm_layout(inner.margins = c(.05, .05, .05, .05))+
+  tm_layout(inner.margins = c(.01, .01, .01, .01), frame = FALSE)+
       #tm_title("B", 
       #     size = 1.5, 
       #     col = "black", 
@@ -113,7 +113,7 @@ C <- tm_shape(US_grid) +
                           legend.bg.color = "white", 
                           legend.text.size = .25,
                           position = tm_pos_in("right", "bottom"))) +
-  tm_layout(inner.margins = c(.05, .05, .05, .05))+ #(S,W,N,E)
+  tm_layout(inner.margins = c(.01, .01, .01, .01), frame = FALSE)+ #(S,W,N,E)
     #tm_title("C", 
     #       size = 1.5, 
     #       col = "black",
@@ -127,7 +127,7 @@ C
 
 Put the tornado, hail, and wind data on the same figure. 
 ```{r}
-tmap_arrange(A, B, C )
+tmap_arrange(A, B, C, ncol = 2)
 ```
 
 
@@ -166,6 +166,82 @@ ModDec.df <- decade.df %>%
 ```{r, eval = FALSE}
 save(decade.df, ModDec.df, file = "Hist_Decades.RData")
 ```
+
+Evaluate April 27, 2011: 
+```{r}
+remotes::install_github("r-lib/rlang")
+library(dplyr)
+```
+
+```{r}
+april <- c("2011-04-27 ")
+
+APR27 <- historical.df %>%
+  filter(Year == 2011,
+         Month == 04,
+         Model == "CNRM-CM6-1")
+```
+
+```{r}
+APR27 <- st_transform(APR27, 4326)
+stateBorders<- st_transform(stateBorders, 4326)
+
+stateBorders <- st_as_sf(stateBorders)
+```
+
+
+```{r}
+
+CAP <- tm_shape(APR27, crs = "+proj=merc") + 
+  tm_polygons(fill = "mlcape", 
+              col_alpha = 0, 
+              fill.scale = tm_scale(breaks = c(0,10,500,1000,1500,2000,2500), labels = c("0 - 9","10 - 499","500 - 999","1000 - 1499", "1500-1999", "2000 - 2500"), values = brewer.pal(n = 6, name = "Oranges")),
+              fill.legend = tm_legend(title = "MLCAPE", 
+                          orientation = "portrait", 
+                          legend.bg.color = "white", 
+                          legend.text.size = .25,
+                          position = tm_pos_in("left", "bottom"))) +
+  tm_layout(inner.margins = c(0.01, .01, .01, .01), frame = FALSE) +
+tm_shape(stateBorders, is.master = TRUE) +
+  tm_borders(fill = "blue", col = "gray10", fill_alpha = 0, lwd = 1.5) 
+```
+
+```{r}
+
+CIN <- tm_shape(APR27, crs = "+proj=merc") + 
+  tm_polygons(fill = "mlcin", 
+              col_alpha = 0, 
+              fill.scale = tm_scale(breaks = c(0, 1, 25, 50, 75,100,125), labels = c("0", "1 - 24","25 - 49","500 - 74","75 - 99", "100-125"), values = brewer.pal(n = 9, name = "GnBu")),
+              fill.legend = tm_legend(title = "MLCIN", 
+                          orientation = "portrait", 
+                          legend.bg.color = "white", 
+                          legend.text.size = .25,
+                          position = tm_pos_in("left", "bottom"))) +
+  tm_layout(inner.margins = c(0.01, .01, .01, .01), frame = FALSE) +
+tm_shape(stateBorders, is.master = TRUE) +
+  tm_borders(fill = "blue", col = "gray10", fill_alpha = 0, lwd = 1.5) 
+```
+
+
+```{r}
+Sh06 <- tm_shape(APR27, crs = "+proj=merc") + 
+  tm_polygons(fill = "shear0_6", 
+              col_alpha = 0, 
+              fill.scale = tm_scale(breaks = c(0,1, 5,10,15,20), labels = c("0","1 - 4","5 - 9","10 - 14", "15-20"), values = brewer.pal(n = 9, name = "Purples")),
+              fill.legend = tm_legend(title = "Shear", 
+                          orientation = "portrait", 
+                          legend.bg.color = "white", 
+                          legend.text.size = .25,
+                          position = tm_pos_in("left", "bottom"))) +
+  tm_layout(inner.margins = c(0.01, .01, .01, .01), frame = FALSE) +
+tm_shape(stateBorders, is.master = TRUE) +
+  tm_borders(fill = "blue", col = "gray10", fill_alpha = 0, lwd = 1.5) 
+```
+
+```{r}
+tmap_arrange(CAP, CIN, Sh06)
+```
+
 
 ## SSP585 Data
 ```{r, eval = FALSE}
