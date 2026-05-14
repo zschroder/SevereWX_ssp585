@@ -4244,3 +4244,17 @@ ssp585.df$month <- month(ymd(ssp585.df$Date))
 ```{r, eval = FALSE}
 #save(ssp585.df, file = "SSP585_CMIP6.RData")
 ```
+
+
+
+
+```{r}
+library(stars)
+options(repos = c(CRAN = "https://cran.rstudio.com/"))
+install.packages("sf", type = "binary")
+
+dsn = 'ZARR:"/vsicurl/https://ncsa.osn.xsede.org/Pangeo/pangeo-forge/gpcp-feedstock/gpcp.zarr"'
+bounds = c(longitude = "lon_bounds", latitude = "lat_bounds")
+r = read_mdim(dsn, bounds = bounds)
+```
+
